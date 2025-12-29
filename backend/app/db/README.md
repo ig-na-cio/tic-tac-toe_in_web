@@ -1,0 +1,1 @@
+Clase Base de la que heredan las otras que crearemos despues para cada tipo de clase tipo User, Tablero, etc.

@@ -1,0 +1,1 @@
+Las clases de la base de datos. Tipo user, tablero, carta, etc.
