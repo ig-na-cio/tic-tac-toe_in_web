@@ -1,35 +1,44 @@
-import { useEffect, useState } from "react";
-import { getUsers, createUser, deleteUser } from "../api/users";
-import UserForm from "../components/UserForm";
-import UserList from "../components/UserList";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { createUser } from "../api/users";
 
-export default function Home() {
-  const [users, setUsers] = useState([]);
+function Home() {
+  const [nombre, setNombre] = useState("");
+  const navigate = useNavigate();
 
+  // Limpia el storage al cargar la página
   useEffect(() => {
-    loadUsers();
+    sessionStorage.removeItem("user_id");
+    sessionStorage.removeItem("username");
   }, []);
 
-  async function loadUsers() {
-    const data = await getUsers();
-    setUsers(data);
-  }
+  async function handleCreateUser() {
+    if (!nombre.trim()) return;
 
-  async function handleCreate(nombre) {
-    await createUser(nombre);
-    loadUsers();
-  }
+    const user = await createUser(nombre);
 
-  async function handleDelete(id) {
-    await deleteUser(id);
-    loadUsers();
-  }
+    sessionStorage.setItem("user_id", user.id);
+    sessionStorage.setItem("username", user.nombre);
+
+    navigate("/menu");
+}
+
 
   return (
     <div>
-      <h1>Usuarios</h1>
-      <UserForm onCreate={handleCreate} />
-      <UserList users={users} onDelete={handleDelete} />
+      <h2>Crear usuario</h2>
+
+      <input
+        placeholder="Nombre"
+        value={nombre}
+        onChange={(e) => setNombre(e.target.value)}
+      />
+
+      <button onClick={handleCreateUser}>
+        Entrar
+      </button>
     </div>
   );
 }
+
+export default Home;
