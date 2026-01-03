@@ -3,7 +3,7 @@ from app.api.router import router
 from app.core.database import engine
 from app.db.base import Base
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api import ws
 
 Base.metadata.create_all(bind=engine)
 
@@ -17,3 +17,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(ws.router)
